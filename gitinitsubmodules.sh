@@ -20,6 +20,8 @@ git clone --depth 1 --single-branch https://github.com/xn--nding-jua/ethernet_ma
 git clone --depth 1 --single-branch https://github.com/ponty/framebuffer-vncserver.git software/framebuffer-vncserver
 git clone --depth 1 --single-branch https://github.com/LibVNC/libvncserver.git software/libvncserver
 git clone --depth 1 --single-branch https://github.com/OpenLightingProject/libartnet.git software/libartnet
+git clone --depth 1 --single-branch --branch v4.2 https://github.com/dosfstools/dosfstools.git software/dosfstools
+git clone --depth 1 --single-branch --branch 1.2.9 https://github.com/exfatprogs/exfatprogs.git software/exfatprogs
 
 git clone -b development --depth 1 --single-branch https://github.com/OpenMixerProject/OpenMixerControl.git software/omc
 

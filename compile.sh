@@ -343,6 +343,35 @@ if [ "$COMPILE_SOFTWARE" = true ]; then
         make -j$(nproc)
         cd ../..
 
+	update_progress 70 "Compile USB filesystem tools (dosfstools, exfatprogs)..."
+	if [ -d dosfstools ]; then
+		cd dosfstools
+		if [ ! -f configure ]; then
+			autoreconf -fi
+		fi
+		./configure \
+			--host=arm-linux-gnueabi \
+			--without-udev \
+			--disable-compat-symlinks \
+			CC=arm-linux-gnueabi-gcc \
+			CFLAGS="$COPTS"
+		make -j$(nproc)
+		cd ..
+	fi
+
+	if [ -d exfatprogs ]; then
+		cd exfatprogs
+		if [ ! -f configure ]; then
+			autoreconf -fi
+		fi
+		./configure \
+			--host=arm-linux-gnueabi \
+			CC=arm-linux-gnueabi-gcc \
+			CFLAGS="$COPTS"
+		make -j$(nproc)
+		cd ..
+	fi
+
 	# exit software-directory
 	cd ..
 fi
@@ -352,6 +381,14 @@ update_progress 75 "Copy and optimize binaries..."
 
 # copy binaries and default-configuration to initramFS
 cp software/omc/build/xm32/omc initramfs_root/openx32/
+if [ -f software/dosfstools/src/mkfs.fat ]; then
+	mkdir -p initramfs_root/sbin
+	cp software/dosfstools/src/mkfs.fat initramfs_root/sbin/mkfs.fat
+fi
+if [ -f software/exfatprogs/mkfs/mkfs.exfat ]; then
+	mkdir -p initramfs_root/sbin
+	cp software/exfatprogs/mkfs/mkfs.exfat initramfs_root/sbin/mkfs.exfat
+fi
 cp software/dropbear/dropbearmulti initramfs_root/openx32/
 cd initramfs_root/openx32/ && ln -sf dropbearmulti dropbear && cd ../../
 cd initramfs_root/openx32/ && ln -sf dropbearmulti dbclient && cd ../../
